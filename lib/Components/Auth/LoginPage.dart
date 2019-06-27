@@ -71,7 +71,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   Widget TypeSelector() {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.blueAccent,
+        color: Colors.white,
         image: DecorationImage(
           colorFilter: ColorFilter.mode(
               Colors.black.withOpacity(0.1), BlendMode.dstATop),
@@ -103,11 +103,11 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: FlatButton(
+                  child: RaisedButton(
                     shape: RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(30.0)),
                     color: Colors.white,
-                    onPressed:(){ _onSupervisorButtonPress(); },
+                    onPressed:(){ _onAdminButtonPress(); },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                         vertical: 20.0,
@@ -118,10 +118,10 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                         children: <Widget>[
                           Expanded(
                             child: Text(
-                              "Teacher",
+                              "Admin",
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: Colors.blueAccent,
+                                color: Colors.pink,
                                 fontWeight: FontWeight.bold
                               ),
                             ),
@@ -141,11 +141,11 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: FlatButton(
+                  child: RaisedButton(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30.0)),
                     color: Colors.white,
-                    onPressed:(){ _onAdminButtonPress(); },
+                    onPressed:(){ _onSupervisorButtonPress(); },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                         vertical: 20.0,
@@ -156,10 +156,10 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                         children: <Widget>[
                           Expanded(
                             child: Text(
-                              "Student",
+                              "Supervisor",
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: Colors.blueAccent,
+                                color: Colors.pink,
                                 fontWeight: FontWeight.bold
                               ),
                             ),
@@ -198,8 +198,8 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      Colors.blueAccent,
-                      Colors.blueAccent
+                      Colors.red,
+                      Colors.pinkAccent
                     ],
                     begin: const FractionalOffset(0.0, 0.0),
                     end: const FractionalOffset(1.0, 1.0),
@@ -278,9 +278,6 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
     return Center(
       child: Container(
         height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
-          color: Colors.blueAccent,
-        ),
         padding: EdgeInsets.only(top: 20.0),
         child: Column(
           children: <Widget>[
@@ -422,12 +419,12 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   }
 
   _initLogIn(context) {
-    if (_mode == 'Teacher') {
+    if (_mode == 'Admin') {
       return ScopedModelDescendant<AppModel>(
           builder: (context, child, model) => Mutation(
             options: MutationOptions(document: """
-            mutation loginTeacher(\$method: String!, \$password: String!){
-              loginTeacher(method: \$method, password: \$password) {
+            mutation loginAdmin(\$method: String!, \$password: String!){
+              loginAdmin(method: \$method, password: \$password) {
                 userId
                 token
               }
@@ -460,10 +457,10 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
               if(resultData != null) {
                 print("See Next");
                 print(resultData);
-                model.setToken(resultData["loginTeacher"]["token"]);
-                model.setId(resultData["loginTeacher"]["userId"]);
-                setSupervisor(resultData["loginTeacher"]["token"], resultData["loginTeacher"]["userId"]);
-                Navigator.pushReplacementNamed(context, '/teacher');
+                model.setToken(resultData["loginAdmin"]["token"]);
+                model.setId(resultData["loginAdmin"]["userId"]);
+                setSupervisor(resultData["loginAdmin"]["token"], resultData["loginAdmin"]["userId"]);
+                Navigator.pushReplacementNamed(context, '/admin');
               }
               else {
                 setState(() {
@@ -478,8 +475,8 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
       return ScopedModelDescendant<AppModel>(
           builder: (context, child, model) => Mutation(
             options: MutationOptions(document: """
-            mutation loginStudent(\$method: String!, \$password: String!){
-              loginStudent(method: \$method, password: \$password) {
+            mutation loginSupervisor(\$method: String!, \$password: String!){
+              loginSupervisor(method: \$method, password: \$password) {
                 userId
                 token
               }
@@ -511,10 +508,10 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
             onCompleted: (dynamic resultData) {
               if(resultData != null) {
                 print(resultData);
-                model.setToken(resultData["loginStudent"]["token"]);
-                model.setId(resultData["loginStudent"]["userId"]);
-                setAdmin(resultData["loginStudent"]["token"], resultData["loginStudent"]["userId"]);
-                Navigator.pushReplacementNamed(context, '/student');
+                model.setToken(resultData["loginSupervisor"]["token"]);
+                model.setId(resultData["loginSupervisor"]["userId"]);
+                setAdmin(resultData["loginSupervisor"]["token"], resultData["loginSupervisor"]["userId"]);
+                Navigator.pushReplacementNamed(context, '/supervisor');
               }
               else {
                 setState(() {

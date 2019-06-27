@@ -3,6 +3,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:scoped_model/scoped_model.dart';
 import './Models/AppModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import './Components/utils/route_generator.dart';
 import './Components/Auth/LoginPage.dart';
 import './Components/Supervisor/Supervisor.dart';
 import './Components/Admin/Admin.dart';
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     HttpLink link;
-    String graphqlUri = 'https://attendanceappbackend.herokuapp.com/graphql';
+    String graphqlUri = 'https://dmrc-attendance-app.herokuapp.com/graphql';
     if (token == null) {
       link = HttpLink(uri: graphqlUri);
     } else {
@@ -54,11 +55,8 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         home: loggedIn ? (userType  == 'Supervisor' ? Supervisor() : Admin()) : LoginPage(),
-        routes: {
-          '/auth': (BuildContext context) => LoginPage(),
-          '/supervisor': (BuildContext context) => Supervisor(),
-          '/admin': (BuildContext context) => Admin(),
-        },
+        initialRoute: '/',
+        onGenerateRoute: RouteGenerator.generateRoute,
         debugShowCheckedModeBanner: false,
       ),
       client: client,
