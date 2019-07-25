@@ -6,7 +6,6 @@ import '../Auth/LoginPage.dart';
 import '../Supervisor/Supervisor.dart';
 import '../Admin/Admin.dart';
 import '../Admin/AddSupervisor.dart';
-import '../Admin/Calendar.dart';
 import '../Admin/Attendance.dart';
 
 class RouteGenerator {
@@ -24,8 +23,6 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => LoginPage());
       case '/addsupervisor':
         return MaterialPageRoute(builder: (_) => AddSupervisor());
-      case '/calendar':
-        return MaterialPageRoute(builder: (_) => Calendar(supervisorId: args));
       case '/attendance':
         return MaterialPageRoute(builder: (_) => Attendance(data: args));
       default:
